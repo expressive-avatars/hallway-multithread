@@ -1,3 +1,5 @@
+const bc = new BroadcastChannel("facetracker_channel")
+
 const action = { type: "log", payload: "hello from facetracker" }
-postMessage(action)
+bc.postMessage(action)
 console.log(action)

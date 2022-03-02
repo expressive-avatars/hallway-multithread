@@ -1,21 +1,26 @@
 import "./style.css"
 
-function onClick() {
-  const facetrackerWindow = window.open("/facetracker/")
+// BroadcastChannel
 
-  /**
-   *
-   * @param {{ data: { type: string, payload: any } }}
-   */
-  function onMessage({ data: action }) {
-    switch (action.type) {
-      case "log":
-        console.log(action.payload)
-        break
-    }
+const bc = new BroadcastChannel("facetracker_channel")
+
+/**
+ * @param {{ data: { type: string, payload: any } }}
+ */
+function onMessage({ data: action }) {
+  switch (action.type) {
+    case "log":
+      console.log(action.payload)
+      break
   }
+}
 
-  facetrackerWindow.addEventListener("message", onMessage)
+bc.addEventListener("message", onMessage)
+
+// Button
+
+function onClick() {
+  window.open("/facetracker/")
 }
 
 const btn = document.querySelector("#btn")
