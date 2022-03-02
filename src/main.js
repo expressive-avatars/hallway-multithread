@@ -1,6 +1,22 @@
-import './style.css'
+import "./style.css"
 
-document.querySelector('#app').innerHTML = `
-  <h1>Hello Vite!</h1>
-  <a href="https://vitejs.dev/guide/features.html" target="_blank">Documentation</a>
-`
+function onClick() {
+  const facetrackerWindow = window.open("/facetracker/")
+
+  /**
+   *
+   * @param {{ data: { type: string, payload: any } }}
+   */
+  function onMessage({ data: action }) {
+    switch (action.type) {
+      case "log":
+        console.log(action.payload)
+        break
+    }
+  }
+
+  facetrackerWindow.addEventListener("message", onMessage)
+}
+
+const btn = document.querySelector("#btn")
+btn.addEventListener("click", onClick)
