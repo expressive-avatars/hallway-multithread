@@ -1,0 +1,12 @@
+#status {
+  display: grid;
+  place-items: center;
+  font-family: monospace;
+  position: absolute;
+  inset: 0;
+  height: 100vh;
+  background-color: hotpink;
+  color: white;
+  text-align: center;
+  font-size: 20pt;
+}

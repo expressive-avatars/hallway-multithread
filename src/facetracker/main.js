@@ -2,7 +2,11 @@ import { AUPredictor } from "@quarkworks-inc/avatar-webkit"
 
 import SleepWorker from "./worker?worker"
 
-const worker = new SleepWorker()
+const FPS = 30
+
+const statusEl = document.querySelector("#status")
+
+statusEl.textContent = "Initializing camera..."
 
 /**
  * @typedef {import("@quarkworks-inc/avatar-webkit").AvatarPrediction} AvatarPrediction
@@ -40,10 +44,13 @@ let predictor = new AUPredictor({
   apiToken: import.meta.env.VITE_AVATAR_WEBKIT_AUTH_TOKEN,
 })
 
-const FPS = 30
+const worker = new SleepWorker()
+
+worker.onmessage = () => {
+  predictor.predict(videoEl)
+}
 
 /**
- *
  * @param {import("@quarkworks-inc/avatar-webkit").AvatarPrediction} results
  */
 predictor.onPredict = (results) => {
@@ -52,12 +59,10 @@ predictor.onPredict = (results) => {
   worker.postMessage(1000 / FPS)
 }
 
-worker.onmessage = () => {
-  predictor.predict(videoEl)
-}
+statusEl.textContent = "Initializing model..."
 
 // Start prediction loop
-predictor.predict(videoEl)
-
-// await predictor.start({ stream: videoStream })
-// console.log("Predictor started...")
+predictor.predict(videoEl).then(() => {
+  statusEl.textContent = "Tracking started"
+  console.log("initialized")
+})
