@@ -41,7 +41,7 @@ videoEl.srcObject = videoStream
 videoEl.autoplay = true
 
 let predictor = new AUPredictor({
-  apiToken: import.meta.env.VITE_AVATAR_WEBKIT_AUTH_TOKEN,
+  apiToken: AVATAR_WEBKIT_AUTH_TOKEN,
 })
 
 const worker = new SleepWorker()

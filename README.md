@@ -1,13 +1,14 @@
-Add your token to an `.env.local` file (untracked):
+Set up your environment variables
 
-```env
-# .env.local
-VITE_AVATAR_WEBKIT_AUTH_TOKEN="..."
+```bash
+# ~/.bashrc
+export AVATAR_WEBKIT_REPO_SECRET="..."
+export AVATAR_WEBKIT_AUTH_TOKEN="..."
 ```
 
 Start dev server:
 
-```
+```bash
 yarn
 yarn dev
 ```
