@@ -1,6 +1,8 @@
 import { AUPredictor } from "@quarkworks-inc/avatar-webkit"
 
-console.log("hello")
+import SleepWorker from "./worker?worker"
+
+const worker = new SleepWorker()
 
 /**
  * @typedef {import("@quarkworks-inc/avatar-webkit").AvatarPrediction} AvatarPrediction
@@ -47,15 +49,15 @@ const FPS = 30
 predictor.onPredict = (results) => {
   console.log(results.actionUnits.jawOpen)
   bc.postMessage({ type: "results", payload: results.actionUnits.jawOpen })
-  setTimeout(predict, 1000 / FPS)
+  worker.postMessage(1000 / FPS)
 }
 
-function predict() {
+worker.onmessage = () => {
   predictor.predict(videoEl)
 }
 
 // Start prediction loop
-predict()
+predictor.predict(videoEl)
 
 // await predictor.start({ stream: videoStream })
 // console.log("Predictor started...")
