@@ -3,6 +3,7 @@ import { OrbitControls } from "three/examples/jsm/controls/OrbitControls.js"
 import { GLTFLoader } from "three/examples/jsm/loaders/GLTFLoader.js"
 import { RGBELoader } from "three/examples/jsm/loaders/RGBELoader.js"
 import Stats from "three/examples/jsm/libs/stats.module.js"
+import avatarURL from "./rpm.glb?url"
 
 // Renders a Three.js scene with a ReadyPlayerMe avatar preview
 export class AvatarPreview {
@@ -40,7 +41,7 @@ export class AvatarPreview {
       controls.enableDamping = true
 
       // Model
-      const gltf = await loadGLTF("https://d1a370nemizbjq.cloudfront.net/b2572c50-a10a-42b6-ab30-694f60fed40f.glb")
+      const gltf = await loadGLTF(avatarURL)
       const avatar = gltf.scene
       const group = new THREE.Group()
       group.add(avatar)
