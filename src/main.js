@@ -1,3 +1,4 @@
+import { AvatarPreview } from "./AvatarPreview"
 import "./style.css"
 
 // BroadcastChannel
@@ -27,3 +28,6 @@ function onClick() {
 
 const btn = document.querySelector("#btn")
 btn.addEventListener("click", onClick)
+
+const preview = new AvatarPreview()
+document.body.appendChild(preview.domElement)

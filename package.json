@@ -11,6 +11,7 @@
     "vite": "^2.9.0"
   },
   "dependencies": {
-    "@quarkworks-inc/avatar-webkit": "0.4.6"
+    "@quarkworks-inc/avatar-webkit": "0.4.6",
+    "three": "^0.139.1"
   }
 }
