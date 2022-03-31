@@ -1,5 +1,5 @@
 {
-  "name": "hallway-cross-tab",
+  "name": "hallway-multithread",
   "private": true,
   "version": "0.0.0",
   "scripts": {
