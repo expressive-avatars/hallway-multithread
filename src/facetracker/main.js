@@ -54,8 +54,7 @@ worker.onmessage = () => {
  * @param {import("@quarkworks-inc/avatar-webkit").AvatarPrediction} results
  */
 predictor.onPredict = (results) => {
-  console.log(results.actionUnits.jawOpen)
-  bc.postMessage({ type: "results", payload: results.actionUnits.jawOpen })
+  bc.postMessage({ type: "results", payload: results })
   worker.postMessage(1000 / FPS)
 }
 

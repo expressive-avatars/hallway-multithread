@@ -1,6 +1,10 @@
 import { AvatarPreview } from "./AvatarPreview"
 import "./style.css"
 
+// Three.js
+const preview = new AvatarPreview()
+document.body.appendChild(preview.domElement)
+
 // BroadcastChannel
 
 const bc = new BroadcastChannel("facetracker_channel")
@@ -14,7 +18,9 @@ function onMessage({ data: action }) {
       console.log(action.payload)
       break
     case "results":
-      console.log(action.payload)
+      /** @type {import("@quarkworks-inc/avatar-webkit").AvatarPrediction} */
+      const results = action.payload
+      preview.setBlendShapes(results.actionUnits)
   }
 }
 
@@ -28,6 +34,3 @@ function onClick() {
 
 const btn = document.querySelector("#btn")
 btn.addEventListener("click", onClick)
-
-const preview = new AvatarPreview()
-document.body.appendChild(preview.domElement)

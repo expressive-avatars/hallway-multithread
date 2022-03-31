@@ -2,17 +2,28 @@ import * as THREE from "three"
 import { OrbitControls } from "three/examples/jsm/controls/OrbitControls.js"
 import { GLTFLoader } from "three/examples/jsm/loaders/GLTFLoader.js"
 import { RGBELoader } from "three/examples/jsm/loaders/RGBELoader.js"
+import Stats from "three/examples/jsm/libs/stats.module.js"
 
 // Renders a Three.js scene with a ReadyPlayerMe avatar preview
 export class AvatarPreview {
   constructor() {
+    const container = document.createElement("div")
+
     // WebGL renderer
     const renderer = new THREE.WebGLRenderer({ antialias: true })
     renderer.setSize(window.innerWidth, window.innerHeight)
     renderer.outputEncoding = THREE.sRGBEncoding
     renderer.toneMapping = THREE.ACESFilmicToneMapping
+    container.appendChild(renderer.domElement)
+
+    // Stats
+    const stats = new Stats()
+    container.appendChild(stats.dom)
 
     const targetMeshes = []
+    const blendShapes = {}
+
+    const self = this
 
     async function init() {
       // Scene, Camera
@@ -23,6 +34,7 @@ export class AvatarPreview {
 
       // OrbitControls
       const controls = new OrbitControls(camera, renderer.domElement)
+      controls.enableDamping = true
 
       // Model
       const gltf = await loadGLTF("https://d1a370nemizbjq.cloudfront.net/b2572c50-a10a-42b6-ab30-694f60fed40f.glb")
@@ -49,6 +61,20 @@ export class AvatarPreview {
       function render() {
         const dt = clock.getDelta()
         controls.update()
+        stats.update()
+
+        for (let i = 0; i < targetMeshes.length; ++i) {
+          const targetMesh = targetMeshes[i]
+          for (let key in blendShapes) {
+            const j = targetMesh.morphTargetDictionary[key]
+            targetMesh.morphTargetInfluences[j] = THREE.MathUtils.damp(
+              targetMesh.morphTargetInfluences[j],
+              blendShapes[key],
+              self.lambda,
+              dt
+            )
+          }
+        }
 
         renderer.render(scene, camera)
       }
@@ -64,15 +90,11 @@ export class AvatarPreview {
       }
     }
 
-    this.domElement = renderer.domElement
+    this.domElement = container
+    this.lambda = 50 // Higher mean less damping (more responsive)
 
-    this.applyBlendShapes = function (blendShapes) {
-      for (let i = 0; i < this.targetMeshes.length; ++i) {
-        const targetMesh = this.targetMeshes[i]
-        for (let key in blendShapes) {
-          targetMesh.morphTargetInfluences[targetMesh[morphTargetDictionary[key]]] = blendShapes[key]
-        }
-      }
+    this.setBlendShapes = function (newBlendShapes) {
+      Object.assign(blendShapes, newBlendShapes)
     }
 
     init()

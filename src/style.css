@@ -1,6 +1,6 @@
 .overlay {
   position: fixed;
-  padding: 20px;
+  width: 100%;
 }
 
 html,
@@ -8,4 +8,14 @@ body,
 canvas {
   height: 100%;
   margin: 0;
+}
+
+button {
+  cursor: pointer;
+  font-size: 20pt;
+  position: absolute;
+  right: 0;
+  background: hotpink;
+  color: white;
+  font-family: monospace;
 }
