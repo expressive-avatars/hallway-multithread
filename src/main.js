@@ -20,7 +20,9 @@ function onMessage({ data: action }) {
     case "results":
       /** @type {import("@quarkworks-inc/avatar-webkit").AvatarPrediction} */
       const results = action.payload
-      preview.setBlendShapes(results.actionUnits)
+      const { rotation, actionUnits } = results
+      preview.setBlendShapes(actionUnits)
+      preview.setHeadRotation(-rotation.pitch, rotation.yaw, -rotation.roll)
   }
 }
 

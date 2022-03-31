@@ -22,6 +22,8 @@ export class AvatarPreview {
 
     const targetMeshes = []
     const blendShapes = {}
+    const headRotation = new THREE.Euler()
+    window.headRotation = headRotation
 
     const self = this
 
@@ -46,6 +48,9 @@ export class AvatarPreview {
       group.scale.setScalar(5)
 
       targetMeshes.push(avatar.getObjectByName("Wolf3D_Head"), avatar.getObjectByName("Wolf3D_Teeth"))
+
+      /** @type {THREE.Bone} */
+      const headBone = avatar.getObjectByName("Head")
 
       // HDRI
       const hdri = await loadHDRI(
@@ -76,6 +81,8 @@ export class AvatarPreview {
           }
         }
 
+        dampEulers(headBone.rotation, headRotation, self.lambda, dt)
+
         renderer.render(scene, camera)
       }
       renderer.setAnimationLoop(render)
@@ -95,6 +102,10 @@ export class AvatarPreview {
 
     this.setBlendShapes = function (newBlendShapes) {
       Object.assign(blendShapes, newBlendShapes)
+    }
+
+    this.setHeadRotation = function (...args) {
+      headRotation.set(...args)
     }
 
     init()
@@ -124,4 +135,19 @@ export function loadHDRI(url, renderer) {
       resolve(envMap)
     })
   })
+}
+
+/**
+ * Damps euler A towards euler B in-place
+ *
+ * @param {THREE.Euler} a
+ * @param {THREE.Euler} b
+ * @param {number} lambda
+ * @param {number} dt
+ */
+function dampEulers(a, b, lambda, dt) {
+  a.x = THREE.MathUtils.damp(a.x, b.x, lambda, dt)
+  a.y = THREE.MathUtils.damp(a.y, b.y, lambda, dt)
+  a.z = THREE.MathUtils.damp(a.z, b.z, lambda, dt)
+  return a
 }
