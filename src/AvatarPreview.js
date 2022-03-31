@@ -23,6 +23,7 @@ export class AvatarPreview {
     const targetMeshes = []
     const blendShapes = {}
     const headRotation = new THREE.Euler()
+    const eyeRotation = new THREE.Euler(-Math.PI / 2, 0, Math.PI)
     window.headRotation = headRotation
 
     const self = this
@@ -46,11 +47,16 @@ export class AvatarPreview {
       scene.add(group)
       avatar.position.set(0, -0.6, 0)
       group.scale.setScalar(5)
+      group.scale.x *= -1
 
       targetMeshes.push(avatar.getObjectByName("Wolf3D_Head"), avatar.getObjectByName("Wolf3D_Teeth"))
 
       /** @type {THREE.Bone} */
-      const headBone = avatar.getObjectByName("Head")
+      const boneHead = avatar.getObjectByName("Head")
+      /** @type {THREE.Bone} */
+      const boneLeftEye = avatar.getObjectByName("LeftEye")
+      /** @type {THREE.Bone} */
+      const boneRightEye = avatar.getObjectByName("RightEye")
 
       // HDRI
       const hdri = await loadHDRI(
@@ -81,7 +87,9 @@ export class AvatarPreview {
           }
         }
 
-        dampEulers(headBone.rotation, headRotation, self.lambda, dt)
+        dampEulers(boneHead.rotation, headRotation, self.lambda, dt)
+        dampEulers(boneLeftEye.rotation, eyeRotation, self.lambda * 3, dt)
+        boneRightEye.rotation.copy(boneLeftEye.rotation)
 
         renderer.render(scene, camera)
       }
@@ -106,6 +114,12 @@ export class AvatarPreview {
 
     this.setHeadRotation = function (...args) {
       headRotation.set(...args)
+    }
+
+    this.setEyeRotation = function (...args) {
+      eyeRotation.set(...args)
+      eyeRotation.x = -Math.PI / 2 + eyeRotation.x
+      eyeRotation.z = Math.PI - eyeRotation.z
     }
 
     init()

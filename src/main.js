@@ -23,6 +23,10 @@ function onMessage({ data: action }) {
       const { rotation, actionUnits } = results
       preview.setBlendShapes(actionUnits)
       preview.setHeadRotation(-rotation.pitch, rotation.yaw, -rotation.roll)
+
+      const eyeRotationX = actionUnits["eyeLookDownRight"] * 0.5 - actionUnits["eyeLookUpRight"] * 0.5
+      const eyeRotationZ = actionUnits["eyeLookOutRight"] - actionUnits["eyeLookOutLeft"]
+      preview.setEyeRotation(eyeRotationX, 0, eyeRotationZ)
   }
 }
 
