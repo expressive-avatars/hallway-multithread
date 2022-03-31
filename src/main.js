@@ -12,6 +12,8 @@ function onMessage({ data: action }) {
     case "log":
       console.log(action.payload)
       break
+    case "results":
+      console.log(action.payload)
   }
 }
 
@@ -20,7 +22,7 @@ bc.addEventListener("message", onMessage)
 // Button
 
 function onClick() {
-  window.open("/facetracker/")
+  window.open("/facetracker/", "_blank", "height=300,width=300")
 }
 
 const btn = document.querySelector("#btn")

@@ -1,17 +1,7 @@
 import { defineConfig } from "vite"
-import inject from "@rollup/plugin-inject"
+import { resolve } from "path"
 
 export default defineConfig({
-  root: "src",
-  plugins: [
-    inject({
-      process: ["process/browser", "*"],
-    }),
-  ],
-  /**
-   * Added because `node_modules/process/browser.js` tries to access module.exports
-   */
-  define: {
-    "module.exports": "{}",
-  },
+  root: resolve(__dirname, "src"),
+  envDir: resolve(__dirname),
 })
